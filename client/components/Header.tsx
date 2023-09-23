@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useSocketID } from "@/contexts/SocketContext";
+import { useSocketID } from "@/contexts/SocketContexts";
 
 const Header = ({ APP_NAME = "My App" }: { APP_NAME?: string }) => {
   const socketID = useSocketID();

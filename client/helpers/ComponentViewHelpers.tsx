@@ -2,29 +2,31 @@ import { Dispatch, SetStateAction } from "react";
 
 export const changeViewHelper = (
   itemSelector: string,
-  stateSetFunc: Dispatch<SetStateAction<string>>,
+  setStateFunc: Dispatch<SetStateAction<string>> | Function,
   events: string[] = ["change", "load"],
 ) => {
   const items = document?.querySelectorAll(itemSelector);
-
-  console.log(`Added EventListeners for `, items);
 
   // Function to change the given "State" (Passed to the EventListenter)
   const setStateVal = () => {
     const checkedItem = document?.querySelector(
       itemSelector + ":checked",
     ) as HTMLInputElement;
-    stateSetFunc(checkedItem?.value || "");
-    console.log(`New value for ${checkedItem?.id} ==`, checkedItem?.value);
+    setStateFunc(checkedItem?.value || "");
+
+    console.log(`New value for "${checkedItem?.getAttribute("name")}" =`, {
+      id: checkedItem?.id,
+      value: checkedItem?.value,
+    });
   };
 
   items?.forEach((item) => {
     events.forEach((event) => {
-      if (event === "load") {
+      if (event !== "load") {
         window.addEventListener(event, setStateVal);
-        return;
+      } else {
+        item.addEventListener(event, setStateVal);
       }
-      item.addEventListener(event, setStateVal);
     });
   });
 

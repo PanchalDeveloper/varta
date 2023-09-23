@@ -1,4 +1,4 @@
-import { useSocketID } from "@/contexts/SocketContext";
+import { useSocketID } from "@/contexts/SocketContexts";
 
 const AppInfo = () => {
   const socketID = useSocketID();

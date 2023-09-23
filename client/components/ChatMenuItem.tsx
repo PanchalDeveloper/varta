@@ -9,7 +9,6 @@ const ChatMenuItem = ({ ItemKey = 1 }: { ItemKey?: number | string }) => {
         name="chat_profile"
         id={`chatProfile_${ItemKey}`}
         value={`chatProfile_${ItemKey}`}
-        defaultChecked={ItemKey === 1}
       />
       <label
         htmlFor={`chatProfile_${ItemKey}`}

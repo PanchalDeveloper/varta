@@ -19,8 +19,8 @@ const Nav = () => {
     <div className="flex items-center justify-between gap-24 rounded-md text-3xl sm:flex-col sm:pb-2 sm:text-xl">
       <ul className="flex flex-auto sm:block">
         {navMenuList.map((item, i) => (
-          <li key={item.value} className="basis-full sm:pt-3">
-            <NavItem ItemKey={i} ItemVal={item.value} icon={item.icon} />
+          <li key={i} className="basis-full sm:pt-3">
+            <NavItem ItemKey={i + 1} ItemVal={item.value} icon={item.icon} />
           </li>
         ))}
       </ul>

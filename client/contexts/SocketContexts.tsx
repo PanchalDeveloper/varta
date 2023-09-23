@@ -10,9 +10,9 @@ import {
 } from "react";
 import { io, Socket } from "socket.io-client";
 
-export const SocketContext = createContext("");
+export const SocketContexts = createContext("");
 
-export const useSocketID = () => useContext(SocketContext);
+export const useSocketID = () => useContext(SocketContexts);
 
 export const useSocket = (
   socketID: string = useSocketID(),
@@ -39,8 +39,10 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <SocketContext.Provider value={socketID}>{children}</SocketContext.Provider>
+    <SocketContexts.Provider value={socketID}>
+      {children}
+    </SocketContexts.Provider>
   );
 };
 
-export default SocketContext;
+export default SocketContexts;

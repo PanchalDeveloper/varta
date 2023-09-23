@@ -1,18 +1,27 @@
 "use client";
 
-import { FormEvent, useState, KeyboardEvent } from "react";
+import {
+  useState,
+  useEffect,
+  FormEvent,
+  KeyboardEvent,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import Message from "./Message";
-import { FormatChatText } from "@/helpers/TextFormatter";
 import ScrollButton from "./ScrollButton";
 import ProfileCard from "./ProfileCard";
+import { FormatChatText } from "@/helpers/TextFormatter";
+import {
+  useChatMessages,
+  useUpdateChatMessages,
+} from "@/contexts/ChatProfilesContexts";
 
 const ChatArea = () => {
-  const [messages, setMessages] = useState<string[]>(() =>
-    Array.from({ length: 45 }, (_, i) => "Message " + (i + 1)),
-  );
+  const [messages, setMessages] = [useChatMessages(), useUpdateChatMessages()];
 
   const sendMessage = (e: FormEvent<HTMLFormElement> | KeyboardEvent): void => {
     e.preventDefault();
@@ -25,12 +34,21 @@ const ChatArea = () => {
 
     msgField.value = "";
 
-    setMessages((prevMessages: Array<string>) => [...prevMessages, msg]);
+    setMessages?.((prevMessages: Array<string>) => [...prevMessages, msg]);
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (event.ctrlKey && event.key === "Enter") sendMessage(event);
   };
+
+  useEffect(() => {
+    document.getElementById("messageArea")?.scrollTo(0, 0); // Scroll to the start of "Message Area"
+  }, [messages]);
+
+  useEffect(() => {
+    document.getElementById("messageArea")?.scrollTo(0, 0); // Scroll to the start of "Message Area"
+  }, [messages]);
+
   return (
     <div className="grid h-full grid-cols-1 grid-rows-[4rem_calc(100vh-7.5rem-3rem)_3rem] justify-center overflow-hidden rounded-lg bg-gray-300 dark:bg-slate-700">
       <header className="flex select-none justify-between bg-gray-300 p-2 drop-shadow-xl dark:bg-slate-900">
