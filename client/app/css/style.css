@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *,
+  :before,
+  :after {
+    box-sizing: border-box;
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 12px;
+  }
+  ::-webkit-scrollbar-track:hover {
+    background: #0004;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #eee5;
+    width: 6px;
+    border-radius: 12px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #eee6;
+    width: 12px;
+  }
+}
+
+@layer utilities {
+  .scroll-gutter {
+    scrollbar-gutter: stable;
+  }
+}
