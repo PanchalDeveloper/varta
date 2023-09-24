@@ -11,28 +11,28 @@ import {
 
 const ChatMenu = () => {
   const chatProfiles = useChatProfiles();
-  const [currChatProfile, setCurrChatProfile] = [
-    useChatProfile(),
-    useUpdateChatProfile(),
-  ];
+  // const [currChatProfile, setCurrChatProfile] = [
+  //   useChatProfile(),
+  //   useUpdateChatProfile(),
+  // ];
 
-  useEffect(() => {
-    const chatMenuClearFunc = changeViewHelper(
-      ".chat-profile",
-      (id: number | string) => {
-        const newChatProfile = chatProfiles.filter(
-          (x) => `chatProfile_${x.id}` === id,
-        )[0];
-        console.log("Setting currProfile = ", newChatProfile);
-        setCurrChatProfile(newChatProfile);
-        console.log("new currProfile val = ", currChatProfile);
-      },
-    );
+  // useEffect(() => {
+  //   const chatMenuClearFunc = changeViewHelper(
+  //     ".chat-profile",
+  //     (id: number | string) => {
+  //       const newChatProfile = chatProfiles.filter(
+  //         (x) => `chatProfile_${x.id}` === id,
+  //       )[0];
+  //       console.log("Setting currProfile = ", newChatProfile);
+  //       setCurrChatProfile(newChatProfile);
+  //       console.log("new currProfile val = ", currChatProfile);
+  //     },
+  //   );
 
-    return () => {
-      chatMenuClearFunc();
-    };
-  }, []);
+  //   return () => {
+  //     chatMenuClearFunc();
+  //   };
+  // }, []);
 
   return (
     <div className="grid basis-full select-none grid-cols-1 grid-rows-[minmax(0px,_5rem)_calc(100svh-5rem-4rem-3rem)] content-between justify-center overflow-hidden rounded-md sm:grid-rows-[minmax(0px,_5rem)_calc(100svh-5rem-4rem)]">

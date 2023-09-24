@@ -20,7 +20,7 @@ import {
   useUpdateChatMessages,
 } from "@/contexts/ChatProfilesContexts";
 
-const ChatArea = () => {
+const MessageArea = () => {
   const [messages, setMessages] = [useChatMessages(), useUpdateChatMessages()];
 
   const sendMessage = (e: FormEvent<HTMLFormElement> | KeyboardEvent): void => {
@@ -111,4 +111,4 @@ const ChatArea = () => {
   );
 };
 
-export default ChatArea;
+export default MessageArea;

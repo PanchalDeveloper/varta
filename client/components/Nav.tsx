@@ -14,6 +14,7 @@ const Nav = () => {
     { value: "call", icon: faPhone },
     { value: "status", icon: faCirclePlay },
   ];
+  // console.log("Navbar Loaded.");
 
   return (
     <div className="flex items-center justify-between gap-24 rounded-md text-3xl sm:flex-col sm:pb-2 sm:text-xl">

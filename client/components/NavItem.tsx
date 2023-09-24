@@ -6,20 +6,24 @@ const NavItem = ({
   ItemKey = 1,
   ItemVal = "",
   icon = faCircle,
+  checked = false,
 }: {
   ItemKey?: number | string;
   ItemVal?: string;
   icon?: IconDefinition;
+  checked?: boolean;
 }) => {
   return (
     <>
       <input
         className="nav-item peer hidden aspect-[3/2]"
         type="radio"
+        title={`Go to "${ItemVal}s"`}
         name="nav_item"
         id={`navItem_${ItemKey}`}
         value={ItemVal}
-        defaultChecked={ItemKey === 1}
+        defaultChecked={checked}
+        aria-checked={checked}
       />
       <label
         htmlFor={`navItem_${ItemKey}`}
