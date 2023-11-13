@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// @db.ObjectId
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id                    String          @id @default(auto()) @map("_id") @db.ObjectId
+  username              String          @unique
+  email                 String?         @unique
+  password              String
+  first_name            String
+  last_name             String?
+  dob                   DateTime?
+  country               String?
+  liveStatus            LiveStatus      @default(ONLINE)
+  phone                 String?         @unique
+  role                  UserRole        @default(BASIC) //App Global Role
+  prefrence             UserPreference? @relation("UserPreferences")
+  createdRooms          Room[]          @relation("RoomCreator")
+  joinedRoomsId         String[]        @default([]) @db.ObjectId
+  joinedRooms           Room[]          @relation("RoomsAndUsers", fields: [joinedRoomsId], references: [id])
+  blockedRoomsId        String[]        @default([]) @db.ObjectId
+  blockedRooms          Room[]          @relation("UserBlockedRooms", fields: [blockedRoomsId], references: [id])
+  profilePicture        String?
+  status                Status[]        @relation("StatusOfUser")
+  isTyping              Boolean?
+  otp                   Otp?            @relation("OTPVerify")
+  maxOTPAttemptsReached Boolean?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+  sentMessages          Message[]       @relation("MessageSender")
+  madeCalls             Call[]          @relation("CallInitiators")
+  receivedCallsId       String[]        @db.ObjectId
+  receivedCalls         Call[]          @relation("CallReceivers", fields: [receivedCallsId], references: [id])
+
+  @@unique([first_name, last_name, dob, email])
+  @@index([username, email, phone])
+}
+
+// UserPreference model
+model UserPreference {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  data   Json?
+  user   User   @relation("UserPreferences", fields: [userId], references: [id])
+  userId String @unique @db.ObjectId
+}
+
+// Room model
+model Room {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  messages          Message[] @relation("RoomsAndMessages", fields: [messagesId], references: [id])
+  messagesId        String[]  @default([]) @db.ObjectId
+  usersId           String[]  @db.ObjectId
+  users             User[]    @relation("RoomsAndUsers", fields: [usersId], references: [id])
+  creatorId         String    @unique @db.ObjectId
+  creator           User      @relation("RoomCreator", fields: [creatorId], references: [id])
+  blockedByUsersId  String[]  @db.ObjectId
+  blockedByUsers    User[]    @relation("UserBlockedRooms", fields: [blockedByUsersId], references: [id])
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastUpdateMessage String?
+}
+
+// Message model
+model Message {
+  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+  content            String
+  attachments        String[]      @default([])
+  senderId           String        @db.ObjectId
+  sender             User          @relation("MessageSender", fields: [senderId], references: [id])
+  roomsId            String[]      @db.ObjectId
+  rooms              Room[]        @relation("RoomsAndMessages", fields: [roomsId], references: [id])
+  forwards           Int           @default(0)
+  repliedToMessage   Message?      @relation("MessageReply", fields: [repliedToMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  repliedToMessageId String?       @db.ObjectId
+  repliedMessages    Message[]     @relation("MessageReply")
+  status             MessageStatus @default(SENDING)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+// Call model (for voice and video calls)
+model Call {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  initiatorId String     @db.ObjectId
+  initiator   User       @relation("CallInitiators", fields: [initiatorId], references: [id])
+  receiversId String[]   @db.ObjectId
+  receivers   User[]     @relation("CallReceivers", fields: [receiversId], references: [id])
+  type        CallType   @default(VOICE)
+  status      CallStatus @default(ACTIVE)
+  duration    Int        @default(0)
+  startedAt   DateTime
+  endedAt     DateTime
+}
+
+// Status model (for User Posting Stories/Daily-Statuses)
+model Status {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String // Text for image/video
+  media     String // URL to image/video
+  expires   DateTime
+  user      User     @relation("StatusOfUser", fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Session model (for authentication)
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String
+  expires      DateTime
+  sessionToken String
+  accessToken  String
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+}
+
+// OTP model (for verification)
+model Otp {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique @db.ObjectId
+  user           User     @relation("OTPVerify", fields: [userId], references: [id])
+  content        String
+  verificationOf OtpType  @default(LOGIN)
+  expires        DateTime
+  createdAt      DateTime @default(now())
+}
+
+// Available User Roles
+enum UserRole {
+  BASIC
+  STAFF
+  ADMIN
+}
+
+// Available User LiveStatuses
+enum LiveStatus {
+  ONLINE
+  OFFLINE
+  ON_CALL
+}
+
+// Available Message Statuses
+enum MessageStatus {
+  SENDING
+  SENT
+  DELIVERED
+  SEEN
+}
+
+// Available Call Types
+enum CallType {
+  VOICE
+  VIDEO
+}
+
+// Available Call Statuses
+enum CallStatus {
+  ACTIVE
+  ENDED
+  ON_HOLD
+  ON_MUTE
+}
+
+// Available Call Types
+enum OtpType {
+  LOGIN
+  SIGNUP
+  FORGOTPASSWORD
+}

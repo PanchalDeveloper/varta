@@ -1,0 +1,30 @@
+{
+  "name": "varta",
+  "version": "1.0.0",
+  "description": "Elevate your online conversations with Varta, a real-time chat application powered by Next.js and Express.js. Experience instant messaging, group chats, and more in a user-friendly interface. Join the future of communication today.",
+  "main": "./dist/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node ./dist/server.js",
+    "dev": "nodemon -V -e ts -w src/ --exec \"npm run build && npm run start\""
+  },
+  "author": "Aman Panchal",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.20",
+    "@types/node": "^20.8.7",
+    "nodemon": "^3.0.1",
+    "prisma": "^5.5.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.5.2",
+    "@socket.io/admin-ui": "^0.5.1",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
